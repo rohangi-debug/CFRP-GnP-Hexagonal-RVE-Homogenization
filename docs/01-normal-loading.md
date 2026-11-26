@@ -34,10 +34,10 @@ I performed three displacement-controlled static structural analyses. In each, I
 
 I extracted normal reaction forces on three relevant boundaries and calculated each normal stiffness coefficient from
 
-$
+$$
 \overline{\sigma}_{ii}=\frac{F_i}{A_i},
 \qquad C_{i1}=\frac{\overline{\sigma}_{ii}}{0.01}.
-$
+$$
 
 
 **X reaction (Force Reaction, Displacement 2)**
