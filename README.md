@@ -51,7 +51,7 @@ flowchart TD
 
 *The 20% GnP designation refers to the interphase formulation, not a 20% GnP fraction throughout the entire CFRP. Detailed constituent inputs and calculation notes will be included with the reproducibility documentation.*
 
-**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. The planned release includes editable SolidWorks part files (`.SLDPRT`) and neutral STEP exports (`.STEP`).
+**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. Their original `.SLDPRT` files belong in [`geometry/`](geometry/README.md); filenames and checksums are documented there. The binary CAD files and optional STEP exports are pending upload.
 
 **Normal loading.** The **one-eighth RVE** is used for displacement-controlled normal loading along X, Y, and Z, subject to the appropriate symmetry constraints. The X-direction case will serve as the detailed worked example; the Y and Z cases follow a corresponding procedure.
 
@@ -85,7 +85,7 @@ An **aligned 20% GnP** interphase case was also analysed, but its agreement with
 | `references/` | Citation information and supporting reference metadata |
 | `images/` | Original model screenshots used in this README |
 
-**Current release status:** This README, the two screenshots, and the random-case validation CSV form the initial documentation package. Geometry files, Workbench model archives, full APDL scripts, and step-by-step guides are **planned additions and are not included yet**. Any shared project files will be reviewed for university ownership and software-licensing restrictions before publication.
+**Current release status:** The repository contains the normal- and shear-loading guides, APDL source and reviewed-copy scripts, and recorded result summaries. The original `.SLDPRT` geometry files and Workbench project archives are **pending upload**. Project files should be reviewed for university ownership and software-licensing restrictions before publication.
 
 **Software:** SolidWorks; ANSYS Workbench / Mechanical (2026 R1, pending confirmation against the archived projects).
 
