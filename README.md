@@ -81,7 +81,6 @@ An **aligned 20% GnP** interphase case was also analysed, but its agreement with
 | `apdl-scripts/` | Periodic boundary-condition scripts and comments |
 | `docs/` | Modelling, boundary-condition, and post-processing guides |
 | `results/` | Numerical outputs and publication comparisons |
-| `references/` | Citation information and supporting reference metadata |
 | `images/` | Original model screenshots used in this README |
 
 **Current release status:** The repository contains the normal- and shear-loading guides, APDL source and reviewed-copy scripts, and recorded result summaries. The SolidWorks parts are available in `geometry/`. ANSYS Workbench project archives (`.wbpz`) are **not included** in this repository; simulation methods and supporting APDL scripts are provided instead. Project files should be reviewed for university ownership and software-licensing restrictions before publication.
