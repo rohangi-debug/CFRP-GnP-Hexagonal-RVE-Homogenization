@@ -8,7 +8,7 @@ I calculated the elastic properties of the **GnP-reinforced epoxy interphase** b
 |---|---|
 | EPON 828 epoxy (isotropic) | $E_m=3.45$ GPa; $\nu_m=0.34$ |
 | GnP (transversely isotropic) | $E^r_{1'}=770$ GPa; $E^r_{3'}=400$ GPa; $G^r_{1'3'}=78$ GPa; $\nu^r_{1'2'}=0.03$; $\nu^r_{1'3'}=0.81$ |
-| AS4 carbon fibre (RVE material) | $E_1=224$ GPa; $E_2=E_3=17.2$ GPa; $G_{12}=G_{13}=27.6$ GPa; $G_{23}=5.73$ GPa; $\nu_{12}=\nu_{13}=0.20$; $\nu_{23}=0.50$ |
+| AS4 carbon fibre (transversely isotropic) | $E_1=224$ GPa; $E_2=E_3=17.2$ GPa; $G_{12}=G_{13}=27.6$ GPa; $G_{23}=5.73$ GPa; $\nu_{12}=\nu_{13}=0.20$; $\nu_{23}=0.50$ |
 
 These are the constituent inputs in Pawlik et al., Table 1. Carbon fibre is a **separate RVE phase**, not part of the epoxy–GnP interphase mixture. I used **20 vol% GnP within the interphase** ($c_r=0.20$, $c_m=0.80$), not 20 vol% throughout the CFRP.
 
@@ -27,7 +27,7 @@ $$
 
 This gives $k_m=4.022854$, $l_m=2.735541$, $n_m=5.310168$, and $m_m=p_m=1.287313$ GPa. I converted GnP's five elastic constants into its Hill parameters using Pawlik's Eq. (1) and Ji's transversely isotropic constitutive relation.
 
-**2. Calculated the intermediate coefficients from Ji's Eq. (12).** I used these expressions without replacing $\alpha_r$ or $\beta_r$:
+**2. Calculated the intermediate coefficients from Ji's Eq. (12).**
 
 $$
 \begin{aligned}

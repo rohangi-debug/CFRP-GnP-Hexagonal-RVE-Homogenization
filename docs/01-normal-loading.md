@@ -26,12 +26,42 @@ I performed three displacement-controlled static structural analyses. In each, I
 | Y | $\varepsilon_{22}=0.01$ | $u_y=0.01L_y=4.16\times10^{-8}$ m |
 | Z | $\varepsilon_{33}=0.01$ | $u_z=0.01L_z=7.20\times10^{-8}$ m |
 
-**X-loading example.** I prescribed $u_x$ using **Displacement 2** on named selection **X1**, with its transverse displacement components free. I extracted normal reaction forces on three relevant boundaries and calculated each normal stiffness coefficient from
+**X-loading example.** I prescribed $u_x$ using **Displacement 2** on named selection **X1**, with its transverse displacement components free. The ANSYS displacement-setting screenshot shows the selected face and applied $u_x=1.04\times10^{-8}$ m.
 
-$$
+![ANSYS Mechanical X-loading displacement setting on named selection X1](../images/normal-x-displacement-settings.png)
+
+*Figure 1. Applied X displacement (1.04 × 10⁻⁸ m); Y and Z components are free.*
+
+I extracted normal reaction forces on three relevant boundaries and calculated each normal stiffness coefficient from
+
+$
 \overline{\sigma}_{ii}=\frac{F_i}{A_i},
 \qquad C_{i1}=\frac{\overline{\sigma}_{ii}}{0.01}.
-$$
+$
+
+
+<details>
+<summary><strong>View the three ANSYS reaction-force screenshots</strong></summary>
+
+**X reaction (Force Reaction, Displacement 2)**
+
+![ANSYS Mechanical X reaction for the X-loading case](../images/normal-x-reaction-fx.png)
+
+*Figure 2. X-direction reaction: $F_x=0.047475$ N.*
+
+**Y reaction (Force Reaction 2, Displacement 4)**
+
+![ANSYS Mechanical Y reaction for the X-loading case](../images/normal-x-reaction-fy.png)
+
+*Figure 3. Y-direction reaction: $F_y=3.7473\times10^{-4}$ N.*
+
+**Z reaction (Force Reaction 3, Displacement 6)**
+
+![ANSYS Mechanical Z reaction for the X-loading case](../images/normal-x-reaction-fz.png)
+
+*Figure 4. Z-direction reaction: $F_z=2.1655\times10^{-4}$ N.*
+
+</details>
 
 | Reaction from ANSYS | Face area | Calculated coefficient |
 |---|---|---|
