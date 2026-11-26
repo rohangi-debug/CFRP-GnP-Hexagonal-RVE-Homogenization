@@ -40,9 +40,6 @@ $
 $
 
 
-<details>
-<summary><strong>View the three ANSYS reaction-force screenshots</strong></summary>
-
 **X reaction (Force Reaction, Displacement 2)**
 
 ![ANSYS Mechanical X reaction for the X-loading case](../images/normal-x-reaction-fx.png)
@@ -61,7 +58,6 @@ $
 
 *Figure 4. Z-direction reaction: $F_z=2.1655\times10^{-4}$ N.*
 
-</details>
 
 | Reaction from ANSYS | Face area | Calculated coefficient |
 |---|---|---|
