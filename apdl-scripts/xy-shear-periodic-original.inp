@@ -1,36 +1,8 @@
-!   Commands inserted into this file will be executed just prior to the ANSYS SOLVE command.
-!   These commands may supersede command settings set by Workbench.
-
-!   Active UNIT system in Workbench when this object was created:  Metric (m, kg, N, s, V, A)
-!   NOTE:  Any data that requires units (such as mass) is assumed to be in the consistent solver unit system.
-!                See Solving Units in the help system for more information.
-
-
-
-
-! ============================================================
-! FULL PERIODIC RVE - SIXTH COLUMN OF C
-! Compute C66 = G12
-! Based on Barbero Eqs. 6.30 and 6.35-6.39
-!
-! Our mapping:
-! x1 = global X = fibre direction
-! x2 = global Y
-! x3 = global Z
-!
-! Applied engineering shear: gamma_XY = 0.01
-! ============================================================
-
 /PREP7
 ALLSEL,ALL
 CSYS,0
 
-! Delete any previously generated constraint equations
 CEDELE,ALL
-
-! ------------------------------------------------------------
-! 1. APPLIED SHEAR AND MODEL DIMENSIONS
-! ------------------------------------------------------------
 
 GAM = 0.01
 
@@ -45,35 +17,16 @@ LX = XMAX-XMIN
 LY = YMAX-YMIN
 LZ = ZMAX-ZMIN
 
-! gamma12 = epsilon12 + epsilon21
-! Half is imposed across each pair of periodic faces
-
 DUYX = 0.5*GAM*LX
 DUXY = 0.5*GAM*LY
 
-! Coordinate-selection tolerance
 TOL = 1e-10
 
-! Pair-check tolerance
 PAIRTOL = 1e-12
 
 BADPAIR = 0
 
-! ============================================================
-! Suppress thousands of APDL output lines during CE creation
-! ============================================================
-
 /NOPR
-
-
-! ============================================================
-! 2. XMIN <-> XMAX FACE INTERIOR
-! Barbero Eq. 6.30
-!
-! UX(Xmax)-UX(Xmin) = 0
-! UY(Xmax)-UY(Xmin) = DUYX
-! UZ(Xmax)-UZ(Xmin) = 0
-! ============================================================
 
 NSEL,S,LOC,X,XMIN-TOL,XMIN+TOL
 NSEL,R,LOC,Y,YMIN+TOL,YMAX-TOL
@@ -88,7 +41,6 @@ NN=0
     X0NODE(II)=NN
 *ENDDO
 
-! IMPORTANT: select ONLY opposite target face
 NSEL,S,LOC,X,XMAX-TOL,XMAX+TOL
 
 *DO,II,1,NXINT
@@ -117,16 +69,6 @@ NSEL,S,LOC,X,XMAX-TOL,XMAX+TOL
 
 *ENDDO
 
-
-! ============================================================
-! 3. YMIN <-> YMAX FACE INTERIOR
-! Barbero Eq. 6.30
-!
-! UX(Ymax)-UX(Ymin) = DUXY
-! UY(Ymax)-UY(Ymin) = 0
-! UZ(Ymax)-UZ(Ymin) = 0
-! ============================================================
-
 ALLSEL,ALL
 
 NSEL,S,LOC,Y,YMIN-TOL,YMIN+TOL
@@ -142,7 +84,6 @@ NN=0
     Y0NODE(II)=NN
 *ENDDO
 
-! Target face only
 NSEL,S,LOC,Y,YMAX-TOL,YMAX+TOL
 
 *DO,II,1,NYINT
@@ -171,14 +112,6 @@ NSEL,S,LOC,Y,YMAX-TOL,YMAX+TOL
 
 *ENDDO
 
-
-! ============================================================
-! 4. ZMIN <-> ZMAX FACE INTERIOR
-! Barbero Eq. 6.30
-!
-! All displacement differences = 0
-! ============================================================
-
 ALLSEL,ALL
 
 NSEL,S,LOC,Z,ZMIN-TOL,ZMIN+TOL
@@ -194,7 +127,6 @@ NN=0
     Z0NODE(II)=NN
 *ENDDO
 
-! Target face only
 NSEL,S,LOC,Z,ZMAX-TOL,ZMAX+TOL
 
 *DO,II,1,NZINT
@@ -223,14 +155,6 @@ NSEL,S,LOC,Z,ZMAX-TOL,ZMAX+TOL
 
 *ENDDO
 
-
-! ============================================================
-! 5. XY EDGE PAIR A
-! Barbero Eq. 6.35
-!
-! (XMAX,YMAX) <-> (XMIN,YMIN)
-! ============================================================
-
 ALLSEL,ALL
 
 NSEL,S,LOC,X,XMAX-TOL,XMAX+TOL
@@ -246,7 +170,6 @@ NN=0
     E1NODE(II)=NN
 *ENDDO
 
-! Target edge only
 ALLSEL,ALL
 NSEL,S,LOC,X,XMIN-TOL,XMIN+TOL
 NSEL,R,LOC,Y,YMIN-TOL,YMIN+TOL
@@ -264,14 +187,6 @@ NSEL,R,LOC,Z,ZMIN+TOL,ZMAX-TOL
     CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
-
-
-! ============================================================
-! 6. XY EDGE PAIR B
-! Barbero Eq. 6.36
-!
-! (XMAX,YMIN) <-> (XMIN,YMAX)
-! ============================================================
 
 ALLSEL,ALL
 
@@ -306,14 +221,6 @@ NSEL,R,LOC,Z,ZMIN+TOL,ZMAX-TOL
 
 *ENDDO
 
-
-! ============================================================
-! 7. XZ EDGE PAIR A
-! Barbero Eq. 6.37
-!
-! (XMAX,ZMAX) <-> (XMIN,ZMIN)
-! ============================================================
-
 ALLSEL,ALL
 
 NSEL,S,LOC,X,XMAX-TOL,XMAX+TOL
@@ -346,14 +253,6 @@ NSEL,R,LOC,Y,YMIN+TOL,YMAX-TOL
     CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
-
-
-! ============================================================
-! 8. XZ EDGE PAIR B
-! Barbero Eq. 6.37
-!
-! (XMAX,ZMIN) <-> (XMIN,ZMAX)
-! ============================================================
 
 ALLSEL,ALL
 
@@ -388,14 +287,6 @@ NSEL,R,LOC,Y,YMIN+TOL,YMAX-TOL
 
 *ENDDO
 
-
-! ============================================================
-! 9. YZ EDGE PAIR A
-! Barbero Eq. 6.38
-!
-! (YMAX,ZMAX) <-> (YMIN,ZMIN)
-! ============================================================
-
 ALLSEL,ALL
 
 NSEL,S,LOC,Y,YMAX-TOL,YMAX+TOL
@@ -428,14 +319,6 @@ NSEL,R,LOC,X,XMIN+TOL,XMAX-TOL
     CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
-
-
-! ============================================================
-! 10. YZ EDGE PAIR B
-! Barbero Eq. 6.38
-!
-! (YMAX,ZMIN) <-> (YMIN,ZMAX)
-! ============================================================
 
 ALLSEL,ALL
 
@@ -470,16 +353,7 @@ NSEL,R,LOC,X,XMIN+TOL,XMAX-TOL
 
 *ENDDO
 
-
-! ============================================================
-! 11. CORNER VERTICES
-! Barbero Eq. 6.39
-! ============================================================
-
 ALLSEL,ALL
-
-! ----- Corner Pair 1 -----
-! (XMAX,YMAX,ZMAX) - (XMIN,YMIN,ZMIN)
 
 N1=NODE(XMAX,YMAX,ZMAX)
 N0=NODE(XMIN,YMIN,ZMIN)
@@ -487,10 +361,6 @@ N0=NODE(XMIN,YMIN,ZMIN)
 CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
 CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
-
-
-! ----- Corner Pair 2 -----
-! (XMAX,YMAX,ZMIN) - (XMIN,YMIN,ZMAX)
 
 ALLSEL,ALL
 N1=NODE(XMAX,YMAX,ZMIN)
@@ -500,10 +370,6 @@ CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
 CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
-
-! ----- Corner Pair 3 -----
-! (XMIN,YMAX,ZMAX) - (XMAX,YMIN,ZMIN)
-
 ALLSEL,ALL
 N1=NODE(XMIN,YMAX,ZMAX)
 N0=NODE(XMAX,YMIN,ZMIN)
@@ -511,10 +377,6 @@ N0=NODE(XMAX,YMIN,ZMIN)
 CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
 CE,NEXT,-DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
-
-
-! ----- Corner Pair 4 -----
-! (XMAX,YMIN,ZMAX) - (XMIN,YMAX,ZMIN)
 
 ALLSEL,ALL
 N1=NODE(XMAX,YMIN,ZMAX)
@@ -524,12 +386,6 @@ CE,NEXT,-DUXY,N1,UX,1,N0,UX,-1
 CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
-
-! ============================================================
-! 12. REMOVE RIGID-BODY TRANSLATION
-! Fix one reference corner
-! ============================================================
-
 ALLSEL,ALL
 
 NREF=NODE(XMIN,YMIN,ZMIN)
@@ -537,11 +393,6 @@ NREF=NODE(XMIN,YMIN,ZMIN)
 D,NREF,UX,0
 D,NREF,UY,0
 D,NREF,UZ,0
-
-
-! ============================================================
-! 13. FINISH
-! ============================================================
 
 ALLSEL,ALL
 

@@ -23,7 +23,7 @@ The intended audience is researchers learning how to implement composite microme
 - [Normal loading: one-eighth RVE](docs/01-normal-loading.md) — displacement-controlled loading, reaction-force recovery and effective normal stiffness.
 - [Periodic XY shear: full RVE](docs/02-shear-loading.md) — APDL periodic constraints, energy-based shear modulus and verification checks.
 
-The original periodic-constraint input is retained alongside a comment-cleaned copy with **unchanged solver commands** in [apdl-scripts/](apdl-scripts/). The [recorded full-RVE shear run](results/random-20pct-shear-solver-summary.md) now documents the energy and volume inputs that reproduce G12 = 6.781739 GPa. The original solver model and mesh-convergence verification are still outstanding.
+The original periodic-constraint and shear-energy commands are available in [apdl-scripts/](apdl-scripts/), with comment lines removed and executable commands preserved. The [recorded full-RVE shear run](results/random-20pct-shear-solver-summary.md) now documents the energy and volume inputs that reproduce G12 = 6.781739 GPa. The original solver model and mesh-convergence verification are still outstanding.
 
 ## Modelling workflow
 

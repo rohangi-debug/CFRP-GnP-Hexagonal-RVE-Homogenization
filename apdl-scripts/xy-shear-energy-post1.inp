@@ -1,6 +1,3 @@
-! Full-RVE XY shear modulus from elastic strain energy
-! Command object: immediately after ANSYS /POST1.
-
 /POST1
 SET,LAST
 ALLSEL,ALL

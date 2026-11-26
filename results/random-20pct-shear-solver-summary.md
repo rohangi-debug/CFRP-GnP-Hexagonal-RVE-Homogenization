@@ -51,6 +51,6 @@ The cell-volume check gives \(2.08\times10^{-6}\cdot8.32\times10^{-6}\cdot14.40\
 - The analysis title identifies the random-20% case but does not independently verify every material assignment.
 - Mesh independence and periodic displacement-jump residuals have not been demonstrated.
 
-This summary is based on the **original** APDL periodic constraints, not the previously sign-reversed review copy. The comment-cleaned reviewed file now retains the original solver commands.
+This summary is based on the **original** APDL periodic constraint commands. The repository retains the same executable commands with comment lines removed.
 
 Reference benchmark: [random-20pct-validation.csv](random-20pct-validation.csv).

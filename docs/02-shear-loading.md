@@ -25,7 +25,7 @@ Periodic displacement constraints were generated using ANSYS APDL constraint equ
 
 For the recorded full RVE these offsets have magnitudes **1.04 × 10⁻⁸ m** and **4.16 × 10⁻⁸ m**, respectively. The script pairs periodic nodes on opposite **face interiors**, and applies separate equations for **edges and corner vertices** to avoid redundant constraints. The three translations of one reference corner are fixed to remove rigid-body motion.
 
-The original commands are retained in [xy-shear-periodic-original.inp](../apdl-scripts/xy-shear-periodic-original.inp). A [comment-cleaned copy](../apdl-scripts/xy-shear-periodic-reviewed.inp) retains identical executable commands. The scripts should be executed on a **matching periodic mesh**; their node searches and boundary-coordinate tolerance depend on that mesh. The underlying periodic-shear formulation follows Barbero, Chapter 6, Eqs. (6.29)–(6.39).
+The original executable commands, with comment lines removed, are retained in [xy-shear-periodic-original.inp](../apdl-scripts/xy-shear-periodic-original.inp). The script should be executed on a **matching periodic mesh**; their node searches and boundary-coordinate tolerance depend on that mesh. The underlying periodic-shear formulation follows Barbero, Chapter 6, Eqs. (6.29)–(6.39).
 
 ## 3. Energy-Based Post-Processing
 
