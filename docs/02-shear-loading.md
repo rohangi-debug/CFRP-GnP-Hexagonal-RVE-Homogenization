@@ -1,10 +1,10 @@
 # Periodic XY Shear Loading — Full Hexagonal RVE
 
-> **Status:** Original APDL commands recovered. The method is documented below; force/energy output and solver run logs are still required for a complete numerical audit.
+> **Status:** Original APDL commands recovered. The method is documented below; the original solver output is available, including force-free energy extraction, mesh size, strain, solver convergence, and warnings; mesh-convergence and boundary-pair audit remain outstanding.
 >
 > **Scope:** Baseline CFRP composite with **20% randomly oriented GnPs within the homogenized interphase**. The material-1/fibre axis is **global X**, material-2 is **global Y**, and material-3 is **global Z**.
 
-**APDL inputs:** [original periodic CE script](../apdl-scripts/xy-shear-periodic-original.inp), [sign-consistent review version](../apdl-scripts/xy-shear-periodic-reviewed.inp), and [energy post-processing commands](../apdl-scripts/xy-shear-energy-post1.inp). The review version changes the signed constants in the `CE` commands; all scripts require verification on the original mesh before reuse.
+**APDL inputs:** [original periodic CE script](../apdl-scripts/xy-shear-periodic-original.inp), [comment-cleaned version with identical CE commands](../apdl-scripts/xy-shear-periodic-reviewed.inp), and [energy post-processing commands](../apdl-scripts/xy-shear-energy-post1.inp). The reviewed file is a comment-cleaned copy with **the original solver commands and CE constants unchanged**. The archived solve used the original input; the reviewed copy has not been re-solved.
 
 ## 1. Objective
 
@@ -16,7 +16,7 @@ The full hexagonal RVE contains three regions: AS4 carbon fibre, EPON 828 epoxy 
 
 The original GitHub image [full-rve-ansys.png](../images/full-rve-ansys.png) illustrates the geometry and mesh but **shows the material name “Aligned 20% GnPs Interface” in the ANSYS tree**. It must not be represented as proof of the **random-case** material assignment. A random-case full-RVE screenshot or solved project must establish the actual material assignments.
 
-The original full-RVE dimensions, total modeled volume, mesh statistics, and solver model archive have not yet been recovered. The APDL pre-solve code automatically queries the mesh coordinate limits rather than hard-coding geometric dimensions.
+The solver log confirms a full-RVE bounding cell of **2.08 × 8.32 × 14.40 µm** (X × Y × Z), **V = 2.49200639 × 10⁻¹⁶ m³**, **1,048,906 nodes**, and **249,879 SOLID186 elements** across 11 geometric bodies. The original solved Workbench project file is still needed to inspect material assignments and mesh topology.
 
 ## 3. Applied Macroscopic XY Shear
 
@@ -84,7 +84,7 @@ For the positive-shear convention, the intended relative-displacement relations 
 
 The original APDL input uses the `CE,NEXT,...` command to enforce these equations and a nearest-selected-node search `NODE(...)` to find the paired target node. The face pairing loops check the two matching coordinates against `PAIRTOL` and increment `BADPAIR` on failure.
 
-**Sign convention:** ANSYS uses `CONST + sum(COEF * DOF) = 0` for a `CE` equation. In the archived source, the positive `DUYX` and `DUXY` constants with coefficients `+1` on the positive-face node and `−1` on the negative-face node therefore impose the **negative** of the displacement jump described in the code comments. Consequently, the imposed signed macroscopic shear is expected to be **−0.01**, even though `GAM` is set to `+0.01`. The elastic energy and recovered modulus are unchanged by reversing the shear direction in a linear elastic model. A separate sign-consistent version of the script changes the nonzero CE constants; that version has not been solved in ANSYS.
+**Sign convention confirmed by the run:** The original CE constants produced a measured volume-averaged XY engineering shear strain of **+0.01000011324**, consistent in sign and magnitude with the prescribed **GAM = +0.01**. The earlier review incorrectly reversed the nonzero CE constants. That change has been withdrawn: the reviewed copy now retains the **original CE commands**. A representative periodic displacement-pair check is still recommended.
 
 ### 4.3 Edges and vertices
 
@@ -138,7 +138,7 @@ The volume-weighted average shear component is
 \boxed{\gamma_{\mathrm{AVG}}=\frac{Q}{V_{\mathrm{TOT}}}.}
 \]
 
-**Definition check:** Confirm that the ANSYS `EPEL,XY` component is returned as **engineering shear strain** for the active solid element formulation. Also check whether `GAMAVG` is numerically close to the imposed \(\pm0.01\). A value near \(\pm0.005\) would indicate a shear-strain convention mismatch and would make the energy-derived modulus four times too large if treated as engineering shear. This comparison is not yet possible because the solver's printed values have not been supplied.
+**Engineering shear strain confirmed:** For the original run, the extracted volume-averaged `EPEL,XY` value is **GAMAVG = +0.01000011324**. The relative difference from the prescribed +0.01 is **0.0011324%**, supporting the engineering-shear convention and excluding a factor-of-two discrepancy in this calculation. This does not replace an independent periodic node-pair displacement check.
 
 The analysis is a baseline small-strain linear elastic model; thus elastic shear strain should coincide with total shear strain under the stated assumptions. If later material models include inelastic strains, this equality must be reconsidered.
 
@@ -176,7 +176,22 @@ For the **recorded** modulus \(G_{12}=6.781739\) GPa and the **coded** \(|\gamma
 =339{,}086.95\ \mathrm{J/m^3}.}
 \]
 
-This is a **calculated consistency target**, not a recovered ANSYS measurement. When the original solution log is provided, verify `UTOT / VTOT` and `GAMAVG` directly rather than assuming that they agree.
+**Observed solver output:** VTOT = **2.49200639 × 10⁻¹⁶ m³**, UTOT = **8.45025999 × 10⁻¹¹ J**, and GAMAVG = **0.01000011324**. The measured energy density is **339,094.64 J/m³**; it differs slightly from the nominal-strain estimate because the extracted average strain is slightly greater than 0.01. Independent substitution gives **G12 = 6.78173912 GPa**, consistent with the ANSYS parameter **6.781739110 GPa** to logged precision.
+
+### 6.2 Recorded solver and mesh information
+
+| Quantity | Recorded value |
+|---|---:|
+| X × Y × Z dimensions | 2.08 × 8.32 × 14.40 µm |
+| Total nodes | 1,048,906 |
+| Total solid elements | 249,879 (SOLID186) |
+| Face-interior unmatched-pair counter (BADPAIR) | 0 |
+| Distributed PCG solver | Converged in 219 iterations |
+| ANSYS reported errors | 0 |
+| GAMAVG | +0.01000011324 |
+| G12ENGGPA | 6.781739110 GPa |
+
+ANSYS reported warnings for **inactive element shape checking** and for **reduced-integration brick elements with the PCG solver**. The latter warns to confirm multiple elements through thickness or use the sparse solver. Neither warning caused a failed solve, but both remain verification items. See [the archived run summary](../results/random-20pct-shear-solver-summary.md).
 
 ## 7. Published Benchmark
 
@@ -186,18 +201,18 @@ The project's recorded result for randomly oriented 20% GnPs in the interphase i
 |---|---:|---:|---:|
 | \(G_{12}\) | 6.781739 GPa | 6.780000 GPa | 0.0256% |
 
-The comparison is recorded in [random-20pct-validation.csv](../results/random-20pct-validation.csv). Agreement with the reference does **not** independently establish correct equation signs, element-wise shear-strain conventions, exact material assignment, or mesh convergence.
+The comparison is recorded in [random-20pct-validation.csv](../results/random-20pct-validation.csv). The actual log establishes the energy calculation, positive average engineering shear strain, and zero unmatched **face-interior** pair count. Agreement with the reference does **not** prove full edge/vertex pairing, independent material-assignment verification, or mesh convergence.
 
 ## 8. Verification Register
 
 | Priority | Check | Why it matters |
 |---|---|---|
-| **High** | Print `GAMAVG`, `UTOT`, `VTOT`, `G12ENGGPA` from the actual run | Confirms the stated numerical result can be reconstructed from the implementation |
-| **High** | Check `GAMAVG ≈ +0.01` or `−0.01` and verify `EPEL,XY` convention | Identifies imposed shear sign and possible factor-of-two error |
-| **High** | Verify actual displacement jumps on matched face-node pairs / ANSYS `CE` constant sign | The author's intended sign and enforced equation may differ |
+| **Complete** | Check `GAMAVG`, `UTOT`, `VTOT`, `G12ENGGPA` | Logged results independently reproduce G12 = 6.781739 GPa |
+| **Complete** | Check the signed engineering shear average | +0.01000011324 agrees with prescribed +0.01 within 0.0011324% |
+| **High** | Verify displacement jumps on representative periodic face, edge and corner nodes | Signed strain agrees with the **original** CE offsets; pairwise displacement differences remain unchecked |
 | **High** | Confirm the **random-20% interphase** was assigned to the solved full RVE | Available full-RVE screenshot instead names an aligned interphase |
-| **High** | Check `BADPAIR = 0` and audit **edge/corner** node matching | The script counts unmatched face interiors but not edge/corner failures |
-| **Medium** | Confirm the recorded `CE` count and solver warnings | Avoids undetected overconstraint, dropped constraints or skipped nodes |
+| **High** | Audit **edge/corner** node matching | BADPAIR = 0 is confirmed for face interiors only |
+| **Medium** | Inspect element-quality settings, through-thickness mesh and CE count | ANSYS warned that shape checking was inactive and reduced-integration bricks were used with PCG |
 | **Medium** | Confirm `CEDELE,ALL` did not remove required pre-existing equations | This command resets all CEs before generating periodic constraints |
 | **Medium** | Confirm all desired structural elements were included by `ESEL,ALL` | Energy must cover the intended material regions and physical volume |
 | **Medium** | Archive full-RVE mesh/geometry and compare refined-mesh shear result | Required to establish numerical mesh independence |
@@ -209,4 +224,4 @@ The comparison is recorded in [random-20pct-validation.csv](../results/random-20
 2. Barbero, E. J. (2014). *Finite Element Analysis of Composite Materials Using ANSYS*, 2nd ed., Chapter 6, especially Eqs. (6.29)–(6.40).
 3. Ji, X.-Y., Cao, Y.-P., and Feng, X.-Q. (2010). *Micromechanics prediction of the effective elastic moduli of graphene sheet-reinforced polymer nanocomposites*. **Modelling and Simulation in Materials Science and Engineering, 18**, 045005. https://doi.org/10.1088/0965-0393/18/4/045005.
 
-**Reproducibility:** The script is included as provided, with a separate sign-corrected candidate. The original solver output and material assignment of the random-GnP case remain to be archived.
+**Reproducibility:** The original script is retained unchanged, with a comment-cleaned copy preserving every solver command. A numerical summary of the original solution log is archived. The full solver file, solved model, complete face/edge/vertex checks and mesh-convergence evidence remain outstanding.

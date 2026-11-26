@@ -1,6 +1,6 @@
-! Full RVE: XY shear periodic constraints
-! In CE: CONST + sum(COEF*DOF) = 0; negative CONST gives positive jump.
-! Verify face, edge and corner node pairs on the target mesh before re-use.
+! Full RVE XY shear: periodic constraint equations
+! GAM is the engineering XY shear strain.
+! Original solver commands and CE constants are retained.
 
 !   Commands inserted into this file will be executed just prior to the ANSYS SOLVE command.
 !   These commands may supersede command settings set by Workbench.
@@ -12,14 +12,14 @@
 
 
 
-! Full-RVE XY shear constraints
-! The subsequent /POST1 commands recover G12 from strain energy.
-! Periodic constraints: Barbero, Ch. 6, Eqs. 6.30 and 6.35-6.39
+! FULL PERIODIC RVE - SIXTH COLUMN OF C
+! Compute C66 = G12
+! Based on Barbero Eqs. 6.30 and 6.35-6.39
 !
-! Coordinates: X = fibre direction (1); Y = 2; Z = 3
-
-
-
+! Global axes: X = fibre (1), Y = 2, Z = 3
+! x1 = global X = fibre direction
+! x2 = global Y
+! x3 = global Z
 !
 ! Applied engineering shear: gamma_XY = 0.01
 
@@ -59,7 +59,7 @@ PAIRTOL = 1e-12
 
 BADPAIR = 0
 
-
+! Suppress thousands of APDL output lines during CE creation
 
 /NOPR
 
@@ -84,7 +84,7 @@ NN=0
     X0NODE(II)=NN
 *ENDDO
 
-
+! IMPORTANT: select ONLY opposite target face
 NSEL,S,LOC,X,XMAX-TOL,XMAX+TOL
 
 *DO,II,1,NXINT
@@ -101,7 +101,7 @@ NSEL,S,LOC,X,XMAX-TOL,XMAX+TOL
 
         *IF,DERR,LE,PAIRTOL,THEN
             CE,NEXT,0,    N1,UX,1,N0,UX,-1
-            CE,NEXT,-DUYX, N1,UY,1,N0,UY,-1
+            CE,NEXT,DUYX, N1,UY,1,N0,UY,-1
             CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
         *ELSE
             BADPAIR=BADPAIR+1
@@ -152,7 +152,7 @@ NSEL,S,LOC,Y,YMAX-TOL,YMAX+TOL
         DERR=ABS(NX(N1)-XX)+ABS(NZ(N1)-ZZ)
 
         *IF,DERR,LE,PAIRTOL,THEN
-            CE,NEXT,-DUXY, N1,UX,1,N0,UX,-1
+            CE,NEXT,DUXY, N1,UX,1,N0,UX,-1
             CE,NEXT,0,    N1,UY,1,N0,UY,-1
             CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
         *ELSE
@@ -249,8 +249,8 @@ NSEL,R,LOC,Z,ZMIN+TOL,ZMAX-TOL
 
     N0=NODE(XMIN,YMIN,ZZ)
 
-    CE,NEXT, -DUXY,N1,UX,1,N0,UX,-1
-    CE,NEXT, -DUYX,N1,UY,1,N0,UY,-1
+    CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
+    CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
     CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
@@ -288,8 +288,8 @@ NSEL,R,LOC,Z,ZMIN+TOL,ZMAX-TOL
 
     N0=NODE(XMIN,YMAX,ZZ)
 
-    CE,NEXT,DUXY,N1,UX,1,N0,UX,-1
-    CE,NEXT, -DUYX,N1,UY,1,N0,UY,-1
+    CE,NEXT,-DUXY,N1,UX,1,N0,UX,-1
+    CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
     CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
@@ -328,7 +328,7 @@ NSEL,R,LOC,Y,YMIN+TOL,YMAX-TOL
     N0=NODE(XMIN,YY,ZMIN)
 
     CE,NEXT,0,    N1,UX,1,N0,UX,-1
-    CE,NEXT,-DUYX, N1,UY,1,N0,UY,-1
+    CE,NEXT,DUYX, N1,UY,1,N0,UY,-1
     CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
@@ -367,7 +367,7 @@ NSEL,R,LOC,Y,YMIN+TOL,YMAX-TOL
     N0=NODE(XMIN,YY,ZMAX)
 
     CE,NEXT,0,    N1,UX,1,N0,UX,-1
-    CE,NEXT,-DUYX, N1,UY,1,N0,UY,-1
+    CE,NEXT,DUYX, N1,UY,1,N0,UY,-1
     CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
 
 *ENDDO
@@ -405,7 +405,7 @@ NSEL,R,LOC,X,XMIN+TOL,XMAX-TOL
 
     N0=NODE(XX,YMIN,ZMIN)
 
-    CE,NEXT,-DUXY,N1,UX,1,N0,UX,-1
+    CE,NEXT,DUXY,N1,UX,1,N0,UX,-1
     CE,NEXT,0,    N1,UY,1,N0,UY,-1
     CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
 
@@ -444,7 +444,7 @@ NSEL,R,LOC,X,XMIN+TOL,XMAX-TOL
 
     N0=NODE(XX,YMIN,ZMAX)
 
-    CE,NEXT,-DUXY,N1,UX,1,N0,UX,-1
+    CE,NEXT,DUXY,N1,UX,1,N0,UX,-1
     CE,NEXT,0,    N1,UY,1,N0,UY,-1
     CE,NEXT,0,    N1,UZ,1,N0,UZ,-1
 
@@ -462,8 +462,8 @@ ALLSEL,ALL
 N1=NODE(XMAX,YMAX,ZMAX)
 N0=NODE(XMIN,YMIN,ZMIN)
 
-CE,NEXT, -DUXY,N1,UX,1,N0,UX,-1
-CE,NEXT, -DUYX,N1,UY,1,N0,UY,-1
+CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
+CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 
@@ -474,8 +474,8 @@ ALLSEL,ALL
 N1=NODE(XMAX,YMAX,ZMIN)
 N0=NODE(XMIN,YMIN,ZMAX)
 
-CE,NEXT, -DUXY,N1,UX,1,N0,UX,-1
-CE,NEXT, -DUYX,N1,UY,1,N0,UY,-1
+CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
+CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 
@@ -486,8 +486,8 @@ ALLSEL,ALL
 N1=NODE(XMIN,YMAX,ZMAX)
 N0=NODE(XMAX,YMIN,ZMIN)
 
-CE,NEXT, -DUXY,N1,UX,1,N0,UX,-1
-CE,NEXT,DUYX,N1,UY,1,N0,UY,-1
+CE,NEXT, DUXY,N1,UX,1,N0,UX,-1
+CE,NEXT,-DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 
@@ -498,8 +498,8 @@ ALLSEL,ALL
 N1=NODE(XMAX,YMIN,ZMAX)
 N0=NODE(XMIN,YMAX,ZMIN)
 
-CE,NEXT,DUXY,N1,UX,1,N0,UX,-1
-CE,NEXT, -DUYX,N1,UY,1,N0,UY,-1
+CE,NEXT,-DUXY,N1,UX,1,N0,UX,-1
+CE,NEXT, DUYX,N1,UY,1,N0,UY,-1
 CE,NEXT, 0,    N1,UZ,1,N0,UZ,-1
 
 
