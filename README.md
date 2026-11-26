@@ -6,9 +6,9 @@
 
 | One-eighth RVE — symmetry-based normal loading | Full RVE — periodic shear loading |
 | :---: | :---: |
-| ![ANSYS Mechanical mesh of the one-eighth hexagonal RVE](images/one-eighth-rve-ansys.png) | ![ANSYS Mechanical mesh of the full hexagonal RVE](images/full-rve-ansys.png) |
+| ![ANSYS Mechanical geometry of the one-eighth hexagonal RVE](images/one-eighth-rve-ansys.png) | ![ANSYS Mechanical mesh of the full hexagonal RVE](images/full-rve-ansys.png) |
 
-*Original ANSYS Mechanical screenshots of the one-eighth and full RVE models.*
+*ANSYS Mechanical geometry view of the one-eighth RVE and mesh view of the full RVE.*
 
 ## Project overview
 
@@ -17,6 +17,14 @@ This repository documents an independent implementation of the multiscale modell
 The model represents three material regions: **carbon fibre**, **GnP-reinforced epoxy interphase**, and **epoxy matrix**. The fibre axis is the **X (longitudinal, 1-) direction**. The geometry is based on a hexagonal fibre arrangement.
 
 The intended audience is researchers learning how to implement composite micromechanics in ANSYS, as well as engineers reviewing the modelling and verification workflow. This is an independent reproduction, not an official implementation from the original authors.
+
+## Implementation guides
+
+- [Interphase property calculation](docs/00-interphase-properties.md) — constituent inputs, Hill parameters and Mori–Tanaka homogenization.
+- [Normal loading: one-eighth RVE](docs/01-normal-loading.md) — displacement-controlled loading, reaction-force recovery and effective normal stiffness.
+- [Periodic XY shear: full RVE](docs/02-shear-loading.md) — APDL periodic constraints, energy-based shear modulus and verification checks.
+
+The APDL scripts are available in [apdl-scripts/](apdl-scripts/), and the [shear-loading guide](docs/02-shear-loading.md) describes the energy-based $G_{12}$ calculation. The original solver model and mesh-convergence verification are still outstanding.
 
 ## Modelling workflow
 
@@ -42,13 +50,13 @@ flowchart TD
 | Shear modulus, $G_I$ | 38.738 GPa |
 | Bulk modulus, $K_I$ | 54.886 GPa |
 
-*The 20% GnP designation refers to the interphase formulation, not a 20% GnP fraction throughout the entire CFRP. Detailed constituent inputs and calculation notes will be included with the reproducibility documentation.*
+*The 20% GnP designation refers to the interphase formulation, not a 20% GnP fraction throughout the entire CFRP. The [interphase calculation](docs/00-interphase-properties.md) documents the inputs, Hill-parameter steps and reported values.*
 
-**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. The planned release includes editable SolidWorks part files (`.SLDPRT`) and neutral STEP exports (`.STEP`).
+**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. Both `.SLDPRT` source files are available in [`geometry/`](geometry/). STL and STEP exports are not currently included.
 
-**Normal loading.** The **one-eighth RVE** is used for displacement-controlled normal loading along X, Y, and Z, subject to the appropriate symmetry constraints. The X-direction case will serve as the detailed worked example; the Y and Z cases follow a corresponding procedure.
+**Normal loading.** The **one-eighth RVE** is used for displacement-controlled normal loading along X, Y, and Z, subject to the appropriate symmetry constraints. The [normal-loading guide](docs/01-normal-loading.md) shows the X-direction worked example and explains the Y and Z analyses.
 
-**Shear loading.** The **full RVE** is used for XY shear. APDL constraint equations (`CE`) couple the displacements of corresponding nodes on periodic boundaries. The constraint implementation and its verification will be documented alongside the script.
+**Shear loading.** The **full RVE** is used for XY shear. APDL constraint equations (`CE`) couple the displacements of corresponding nodes on periodic boundaries. The [shear-loading guide](docs/02-shear-loading.md) covers the constraint implementation, reported result and remaining verification limitations.
 
 **Property extraction.** Effective stiffness coefficients are obtained from the prescribed macroscopic deformation and the simulated response; the resulting constitutive properties are recovered using the stiffness/compliance relations. The XY shear calculation also uses total elastic strain energy.
 
@@ -62,7 +70,7 @@ flowchart TD
 | $\nu_{23}$ | 0.472923 | 0.47000 | 0.62% |
 | $G_{12}$ (GPa) | 6.781739 | 6.78000 | 0.03% |
 
-The relative difference is calculated as $100|p_{\mathrm{FE}}-p_{\mathrm{ref}}|/|p_{\mathrm{ref}}|$. Values above are from the recorded project calculations and will be checked against the archived models before the final reproducibility release. The tabular data are also provided in [`results/random-20pct-validation.csv`](results/random-20pct-validation.csv).
+The relative difference is calculated as $100|p_{\mathrm{FE}}-p_{\mathrm{ref}}|/|p_{\mathrm{ref}}|$. Values above are from the recorded project calculations and checked where original solver outputs are available. ANSYS Workbench project archives are not part of the repository. The comparison table is also available in [`results/`](results/README.md).
 
 An **aligned 20% GnP** interphase case was also analysed, but its agreement with published trends remains under review; it is **not** part of the validated comparison above.
 
@@ -70,17 +78,15 @@ An **aligned 20% GnP** interphase case was also analysed, but its agreement with
 
 | Folder | Purpose |
 |---|---|
-| `geometry/` | SolidWorks source geometry and STEP exports |
-| `ansys-models/` | Configured ANSYS Workbench project archives (`.wbpz`) |
+| `geometry/` | SolidWorks source models |
 | `apdl-scripts/` | Periodic boundary-condition scripts and comments |
 | `docs/` | Modelling, boundary-condition, and post-processing guides |
-| `results/` | Numerical outputs and publication comparisons |
-| `references/` | Citation information and supporting reference metadata |
+| `results/` | ANSYS results compared with the reference paper |
 | `images/` | Original model screenshots used in this README |
 
-**Current release status:** This README, the two screenshots, and the random-case validation CSV form the initial documentation package. Geometry files, Workbench model archives, full APDL scripts, and step-by-step guides are **planned additions and are not included yet**. Any shared project files will be reviewed for university ownership and software-licensing restrictions before publication.
+**Current release status:** The repository contains the normal- and shear-loading guides, APDL scripts, and a results comparison table. The SolidWorks parts are available in `geometry/`. ANSYS Workbench project archives (`.wbpz`) are **not included** in this repository; simulation methods and supporting APDL scripts are provided instead. Project files should be reviewed for university ownership and software-licensing restrictions before publication.
 
-**Software:** SolidWorks; ANSYS Workbench / Mechanical (2026 R1, pending confirmation against the archived projects).
+**Software:** SolidWorks; ANSYS Workbench / Mechanical. The archived shear solver output identifies ANSYS MAPDL 2026 R1.
 
 ## References
 
