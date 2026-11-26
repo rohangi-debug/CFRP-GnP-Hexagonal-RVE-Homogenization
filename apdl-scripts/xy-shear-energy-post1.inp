@@ -1,10 +1,11 @@
+
 /POST1
 SET,LAST
 ALLSEL,ALL
 ESEL,ALL
 RSYS,0
-
 ETABLE,ERAS
+
 ETABLE,VOL,VOLU
 ETABLE,SENE,SENE
 ETABLE,GXY,EPEL,XY
@@ -19,10 +20,9 @@ GAMAVG=GXYVSUM/VTOT
 G12ENG=2*UTOT/(VTOT*GAMAVG*GAMAVG)
 G12ENGGPA=G12ENG/1E9
 
-/COM,===============================================
-/COM, XY SHEAR ENERGY RECOVERY
-/COM,===============================================
-
+/COM,=============================================
+/COM, XY SHEAR - ENERGY RECOVERY
+/COM,=============================================
 *VWRITE,VTOT
 ('TOTAL VOLUME       = ',E16.8,' m^3')
 *VWRITE,UTOT
@@ -31,6 +31,5 @@ G12ENGGPA=G12ENG/1E9
 ('AVERAGE GAMMA_XY   = ',E16.8)
 *VWRITE,G12ENGGPA
 ('G12 FROM ENERGY    = ',F12.6,' GPa')
-
-/COM,===============================================
+/COM,=============================================
 FINISH
