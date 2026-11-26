@@ -68,5 +68,3 @@ $$
 I repeated the reaction-force procedure for Y and Z loading to complete the normal stiffness matrix $\mathbf C_N$. After calculating $\mathbf S_N=\mathbf C_N^{-1}$, I obtained $E_1=1/S_{11}$, $E_2=1/S_{22}$, $\nu_{12}=-S_{21}/S_{11}$, and $\nu_{23}=-S_{32}/S_{22}$.
 
 I recorded the [X-direction reaction data](../results/normal-x-reaction-summary.csv) and [comparison with the published values](../results/random-20pct-validation.csv).
-
-**Verification status:** I independently recalculated the X coefficients from rounded ANSYS readings. The detailed Y/Z reaction tables, complete face-by-face boundary-condition scopes, and mesh-convergence results are not included. The Y/Z dimension mapping used in the X-loading face-area calculation also needs confirmation against the source CAD.

@@ -43,5 +43,3 @@ where $U$ is total elastic strain energy, $V$ is the RVE volume, and $\overline{
 | Relative difference | **0.026%** |
 
 The recorded run on 9 November 2026 converged after **219 PCG iterations** with no errors. The [solver summary](../results/random-20pct-shear-solver-summary.md) preserves the numerical inputs and warnings.
-
-**Verification status:** The strain-energy calculation is reproducible from the logged output. Mesh convergence, all periodic displacement-jump residuals, and independent material-assignment verification have not been documented. The script's zero unmatched-node counter covers **face interiors only**, not the edge and corner checks. This is agreement with a numerical benchmark, not independent experimental validation.
