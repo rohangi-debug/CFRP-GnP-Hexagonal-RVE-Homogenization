@@ -52,7 +52,7 @@ flowchart TD
 
 *The 20% GnP designation refers to the interphase formulation, not a 20% GnP fraction throughout the entire CFRP. The [interphase calculation](docs/00-interphase-properties.md) documents the inputs, Hill-parameter steps and reported values.*
 
-**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. Both `.SLDPRT` source files and STL visualization exports are available in [`geometry/`](geometry/). Neutral STEP exports are not currently included.
+**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. Both `.SLDPRT` source files are available in [`geometry/`](geometry/). STL and STEP exports are not currently included.
 
 **Normal loading.** The **one-eighth RVE** is used for displacement-controlled normal loading along X, Y, and Z, subject to the appropriate symmetry constraints. The [normal-loading guide](docs/01-normal-loading.md) shows the X-direction worked example and explains the Y and Z analyses.
 
@@ -78,7 +78,7 @@ An **aligned 20% GnP** interphase case was also analysed, but its agreement with
 
 | Folder | Purpose |
 |---|---|
-| `geometry/` | SolidWorks source models and STL visualization exports |
+| `geometry/` | SolidWorks source models |
 | `apdl-scripts/` | Periodic boundary-condition scripts and comments |
 | `docs/` | Modelling, boundary-condition, and post-processing guides |
 | `results/` | Numerical outputs and publication comparisons |
