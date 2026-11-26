@@ -103,7 +103,7 @@ The nominal element size was selected from the geometric resolution required for
 
 ## 5. Boundary Conditions
 
-Displacement-controlled normal loading was used to generate three independent macroscopic strain states. The following is the **previously documented setup**; the full list of face selections and displacement components has not yet been recovered from the solved project.
+Displacement-controlled normal loading was used to generate three independent macroscopic strain states. The following is the **previously documented setup**; the Y-loading strain state has been clarified by the researcher: a prescribed 1% Y-normal strain with zero macroscopic X- and Z-normal strains. Exact face selections and reaction-force outputs still require confirmation against the solved project.
 
 ### 5.1 X-Direction Loading
 
@@ -126,11 +126,19 @@ Other components were described as free unless constrained by symmetry.
 
 ### 5.2 Y- and Z-Direction Loading
 
-The analogous displacement-controlled procedure was repeated for loading along Y and Z, prescribing a nominal 1% strain along the loaded axis. The actual face dimensions and ANSYS face scopes must be confirmed from the project files.
+**Researcher-confirmed Y-loading procedure:** A macroscopic normal strain of 0.01 was applied in the global Y-direction, and the macroscopic X- and Z-direction normal strains were held at zero:
+
+\[
+[\overline\varepsilon_{11},\overline\varepsilon_{22},\overline\varepsilon_{33}]^T=[0,0.01,0]^T.
+\]
+
+The reaction-force components were extracted for all three directions to obtain **\(C_{12}\), \(C_{22}\), and \(C_{32}\)**. See Section 6.4 for the direct formula. This establishes the prescribed **macroscopic strain state**, although the precise face-scoping details and original force values have yet to be re-examined.
+
+The previously documented Z-direction procedure likewise prescribed a nominal 1% axial strain with the corresponding symmetry constraints. The original displacement objects and face dimensions must be confirmed from the ANSYS model.
 
 ### 5.3 Important Boundary-Condition Verification
 
-**The recorded table above is insufficient to establish that the imposed macroscopic transverse strains were zero.** For direct reaction-force recovery of a column of the stiffness matrix, all three average normal strains must be controlled. In the corresponding one-eighth-RVE procedure given in Barbero, Chapter 6, Eqs. (6.21), (6.24), and (6.27), the transverse displacement component is also fixed on the **opposite outer face**.
+**The Y-loading macroscopic transverse strains are now researcher-confirmed as zero; the X- and Z-loading constraints still require checking against the archived ANSYS settings.** For direct reaction-force recovery of a column of the stiffness matrix, all three average normal strains must be controlled. In the corresponding one-eighth-RVE procedure given in Barbero, Chapter 6, Eqs. (6.21), (6.24), and (6.27), the transverse displacement component is also fixed on the **opposite outer face**.
 
 For an X-normal-strain stiffness-column experiment, the required macroscopic strain state is
 
@@ -141,7 +149,7 @@ For an X-normal-strain stiffness-column experiment, the required macroscopic str
 
 For the corresponding Y and Z experiments, the intended strain states are \([0,0.01,0]^T\) and \([0,0,0.01]^T\).
 
-**Verification required:** Inspect all ANSYS *Displacement* objects, their scoped faces, components and magnitudes. If the outer transverse faces were free, the measured average strain vectors must be recovered and the general matrix method in Section 6.4 used instead. No assumption that those missing constraints were present is made here.
+**Verification required:** Inspect the ANSYS *Displacement* objects, scoped faces, components and magnitudes to reconstruct the exact boundary implementation. For Y loading, the researcher confirmed the pure-strain state, so the second stiffness column follows directly from Y-loading reaction forces. For X and Z loading, if a transverse component was not actually constrained, the measured average strain vectors must instead be recovered and the general matrix method in Section 6.4 used.
 
 ## 6. Solution and Reaction-Force Post-Processing
 
@@ -207,7 +215,13 @@ C_{31}&C_{32}&C_{33}
 \boxed{C_{ij}=\frac{F_i^{(j)}}{A_i(0.01)}}.
 \]
 
-That is, the X, Y and Z load cases provide, respectively, columns 1, 2 and 3 of \(\mathbf C_N^{\mathrm{eff}}\). The individual reaction forces must be retained so this operation can be audited.
+That is, the X, Y and Z load cases provide, respectively, columns 1, 2 and 3 of \(\mathbf C_N^{\mathrm{eff}}\), **when the stated pure-strain conditions are met**. The Y-loading conditions have been confirmed by the researcher, giving the second-column equations:
+
+\[
+\boxed{C_{12}=\frac{F_x^{(Y)}}{0.01A_x},\qquad C_{22}=\frac{F_y^{(Y)}}{0.01A_y},\qquad C_{32}=\frac{F_z^{(Y)}}{0.01A_z}}.
+\]
+
+For X and Z loading, corresponding direct extraction remains contingent on the exact archived boundary implementation. The individual reaction forces must be retained so the calculation can be audited.
 
 **Case B — transverse strains were not all constrained.** If the average normal strain vector differs from the idealized pure-strain state, assemble the three measured average stress and strain vectors as columns:
 
@@ -311,7 +325,7 @@ The corresponding transverse shear modulus is \(G_{23}\approx3.78715\) GPa. The 
 | Constituent property assignment | Recorded baseline input tables | Verify material assignment to each body; screenshots show both aligned and random material names in the tree |
 | Mesh | Recorded 100 nm target, two interphase elements, 159,561 nodes and 36,454 elements | Independent mesh-convergence study |
 | Normal strain amplitude | Recorded 1% X/Y/Z loading | Confirm applied displacement components and scope for all three analyses |
-| Transverse constraints | Zero-coordinate symmetry constraints documented | Check positive outer transverse faces; critical for direct \(C_{ij}=F_i/(A_i\varepsilon_j)\) recovery |
+| Transverse constraints | Researcher confirms Y loading used \(\overline\varepsilon_{11}=\overline\varepsilon_{33}=0\), alongside \(\overline\varepsilon_{22}=0.01\) | Confirm face-scoping details; check X/Z loading pure-strain constraints before direct extraction |
 | Reaction forces | One force-reaction screenshot for Displacement 2 | Recover all signed X/Y/Z force resultants, face areas, and load-case mapping |
 | Stiffness matrix | Engineering constants archived, implied matrix reconstructed in Section 7.2 | Recompute the full \(3\times3\) normal stiffness matrix from ANSYS results; check symmetry and positive definiteness |
 | Shear stiffness | Recorded \(G_{12}=6.781739\) GPa | Archive full-RVE periodic-constraint APDL, strain energy, imposed shear strain and calculation |
