@@ -157,19 +157,19 @@ For the corresponding Y and Z experiments, the intended strain states are \([0,0
 
 The linear elastic RVE was solved in ANSYS Mechanical for each of the three normal-loading configurations. The recorded procedure extracted **reaction forces**, rather than directly averaging element stresses, to calculate the macroscopic normal stress responses.
 
-### 6.2 Archived Evidence of Force-Reaction Extraction
+### 6.2 X-Loading Reaction Forces (25 November 2026)
 
-The repository screenshot [one-eighth-rve-ansys.png](../images/one-eighth-rve-ansys.png) shows an ANSYS *Force Reaction* result scoped to **Displacement 2**. The displayed force components are approximately:
+Three ANSYS Mechanical *Force Reaction* probes were extracted from the **X-normal loading** analysis, each scoped using *Location Method → Boundary Condition* and the global coordinate system. The X loading displacement is recorded on **Displacement 2**, named selection **X1**, as \(U_x=1.04\times10^{-8}\) m (1% strain over 1.04 µm). The researcher confirms that the other macroscopic normal strain components were constrained to zero.
 
-| Global force component | Screenshot value |
-|---|---:|
-| \(F_X\) | \(1.7215\times10^{-12}\) N |
-| \(F_Y\) | \(3.845\times10^{-7}\) N |
-| \(F_Z\) | \(5.7583\times10^{-4}\) N |
+| Reaction probe | Scoped boundary condition | \(F_x\) (N) | \(F_y\) (N) | \(F_z\) (N) |
+|---|---|---:|---:|---:|
+| Force Reaction | Displacement 2 (X1) | \(4.7475\times10^{-2}\) | \(-9.3824\times10^{-14}\) | \(2.2518\times10^{-14}\) |
+| Force Reaction 2 | Displacement 4 | \(-1.5345\times10^{-12}\) | \(3.7473\times10^{-4}\) | \(-2.5637\times10^{-7}\) |
+| Force Reaction 3 | Displacement 6 | \(1.4299\times10^{-12}\) | \(1.8468\times10^{-7}\) | \(2.1655\times10^{-4}\) |
 
-The displayed total reaction magnitude is approximately \(5.7583\times10^{-4}\) N.
+Values are transcribed from three ANSYS Mechanical screenshots of the solved X-loading model. The **normal components** used in the stiffness calculation are \(F_x\) from Displacement 2, \(F_y\) from Displacement 4, and \(F_z\) from Displacement 6. The transverse force values shown on the other probes are not substituted in place of the corresponding face-normal force.
 
-**Evidence limit:** This screenshot does **not** identify all the reaction forces required for the three stiffness columns, nor does it verify the corresponding face selections or loading-case labels. These values should not be inserted into the stiffness calculations until the solved case and selected boundary condition are confirmed.
+The screenshots were provided during model review and have not yet been uploaded to the repository as image evidence. The named selections and exact scopes of Displacement 4 and Displacement 6 should be retained with the archived project.
 
 ### 6.3 Average Stress from Reaction Forces
 
@@ -244,6 +244,46 @@ For three linearly independent strain vectors and a valid homogenized response,
 \]
 
 Only the measured strain vectors, not the imposed axial displacements alone, justify use of this general relation. For either case, linear elasticity requires \(C_{ij}=C_{ji}\) within numerical accuracy.
+
+### 6.4.1 Worked Extraction: First Normal Stiffness Column
+
+For X loading, \(\overline\varepsilon_{11}=0.01\), \(\overline\varepsilon_{22}=0\), and \(\overline\varepsilon_{33}=0\). Using the previously recorded one-eighth-RVE dimensions and the working global-axis mapping \(L_x=1.04\ \mu\mathrm m\), \(L_y=4.16\ \mu\mathrm m\), \(L_z=7.20\ \mu\mathrm m\), the **gross external face areas** are:
+
+\[
+A_x=L_yL_z=2.9952\times10^{-11}\ \mathrm{m}^2,\quad
+A_y=L_xL_z=7.4880\times10^{-12}\ \mathrm{m}^2,\quad
+A_z=L_xL_y=4.3264\times10^{-12}\ \mathrm{m}^2.
+\]
+
+Combining the normal reaction components from Section 6.2 with the prescribed X strain gives:
+
+\[
+C_{11}=\frac{0.047475}{(2.9952\times10^{-11})(0.01)}
+\approx158.503606\ \mathrm{GPa},
+\]
+
+\[
+C_{21}=\frac{3.7473\times10^{-4}}{(7.4880\times10^{-12})(0.01)}
+\approx5.004407\ \mathrm{GPa},
+\]
+
+\[
+C_{31}=\frac{2.1655\times10^{-4}}{(4.3264\times10^{-12})(0.01)}
+\approx5.005316\ \mathrm{GPa}.
+\]
+
+Thus, from the rounded screenshot values,
+
+\[
+\boxed{\mathbf C_N^{(1)}\approx
+\begin{bmatrix}
+158.503606\\5.004407\\5.005316
+\end{bmatrix}\ \mathrm{GPa}.}
+\]
+
+These are **independently recalculated coefficients based on the screenshot reactions and recorded geometry**. The exact Y/Z face dimension mapping still requires checking against coordinate bounds in the CAD/ANSYS project; until then, the stated off-diagonal values are conditional on the mapping above. The small difference between \(C_{21}\) and \(C_{31}\) is consistent with approximate transverse isotropy. The reconstructed \(C_{11}\) agrees with the previously implied value of 158.5036 GPa, and the off-diagonal values differ by less than 0.1% from the implied 5.0074 GPa coefficients, considering rounded reaction outputs.
+
+See [the first-column calculation summary](../results/normal-x-reaction-summary.csv) for the input forces, areas and resulting coefficients.
 
 ### 6.5 Recovering Engineering Elastic Constants
 
@@ -326,8 +366,8 @@ The corresponding transverse shear modulus is \(G_{23}\approx3.78715\) GPa. The 
 | Mesh | Recorded 100 nm target, two interphase elements, 159,561 nodes and 36,454 elements | Independent mesh-convergence study |
 | Normal strain amplitude | Recorded 1% X/Y/Z loading | Confirm applied displacement components and scope for all three analyses |
 | Transverse constraints | Researcher confirms Y loading used \(\overline\varepsilon_{11}=\overline\varepsilon_{33}=0\), alongside \(\overline\varepsilon_{22}=0.01\) | Confirm face-scoping details; check X/Z loading pure-strain constraints before direct extraction |
-| Reaction forces | One force-reaction screenshot for Displacement 2 | Recover all signed X/Y/Z force resultants, face areas, and load-case mapping |
-| Stiffness matrix | Engineering constants archived, implied matrix reconstructed in Section 7.2 | Recompute the full \(3\times3\) normal stiffness matrix from ANSYS results; check symmetry and positive definiteness |
+| Reaction forces | Three X-loading force-reaction screenshots obtained: Displacements 2, 4 and 6; first-column stiffness coefficients reconstructed | Preserve face selection details and export reaction tables; obtain Y/Z-loading force data |
+| Stiffness matrix | First column independently reconstructed from X-loading reaction screenshots, plus implied matrix in Section 7.2 | Confirm transverse face dimension mapping and recover second/third columns from Y/Z loading; check symmetry and positive definiteness |
 | Shear stiffness | Recorded \(G_{12}=6.781739\) GPa | Archive full-RVE periodic-constraint APDL, strain energy, imposed shear strain and calculation |
 | Interphase homogenization | Four interphase effective properties recorded | Archive constituent inputs, Mori–Tanaka calculations and equation-version check |
 | Scientific comparison | Baseline CSV in repository | Confirm recorded values against solved models; do not label literature agreement as mesh convergence |
