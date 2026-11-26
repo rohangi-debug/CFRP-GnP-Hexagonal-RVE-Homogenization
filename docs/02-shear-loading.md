@@ -1,78 +1,47 @@
-# Periodic XY Shear Loading — Full Hexagonal RVE
+# Periodic XY shear — full hexagonal RVE
 
-## 1. Purpose and Model
+I used a **full hexagonal RVE** in ANSYS Mechanical to calculate the effective longitudinal shear modulus \(G_{12}\). This simulation used the same constituent materials and [homogenized random 20 vol% GnP interphase](00-interphase-properties.md) as my [normal-loading analysis](01-normal-loading.md).
 
-The longitudinal shear modulus \(G_{12}\) was obtained using the **full hexagonal RVE**, with global **X along the carbon fibre** (material direction 1) and global **Y along direction 2**. The material regions and properties are the same as those in [01-normal-loading.md](01-normal-loading.md), for the **20 vol% randomly oriented GnP interphase**.
+## Model and boundary conditions
 
-The full-RVE model uses a bounding cell of **2.08 × 8.32 × 14.40 µm** (X × Y × Z), with **1,048,906 nodes** and **249,879 SOLID186 elements**. The recorded simulation was solved in **ANSYS Mechanical / MAPDL 2026 R1**.
+| Detail | Model value |
+|---|---|
+| RVE dimensions (X × Y × Z) | 2.08 × 8.32 × 14.40 µm |
+| Fibre direction | Global X (material direction 1) |
+| Mesh count | 1,048,906 nodes; 249,879 SOLID186 elements |
+| Solver | ANSYS Mechanical / MAPDL 2026 R1 |
+| Applied engineering shear | \(\gamma_{12}=0.01\) |
 
-## 2. Periodic Boundary Conditions
-
-The full RVE was subjected to **engineering XY shear strain**
-
-\[
-\gamma_{12}=0.01,\qquad
-\varepsilon_{12}=\varepsilon_{21}=\gamma_{12}/2.
-\]
-
-Periodic displacement constraints were generated using ANSYS APDL constraint equations (CE). The pre-solve script obtains the coordinate bounds and automatically calculates the shear displacement offsets:
+I used APDL **constraint equations (CE)** to impose periodic displacement compatibility on opposite faces. My script implemented the XY shear displacement jumps
 
 \[
-\Delta u_y^{(X)}=\frac{\gamma_{12}L_x}{2},
-\qquad
+\Delta u_y^{(X)}=\frac{\gamma_{12}L_x}{2},\qquad
 \Delta u_x^{(Y)}=\frac{\gamma_{12}L_y}{2}.
 \]
 
-For the recorded full RVE these offsets have magnitudes **1.04 × 10⁻⁸ m** and **4.16 × 10⁻⁸ m**, respectively. The script pairs periodic nodes on opposite **face interiors**, and applies separate equations for **edges and corner vertices** to avoid redundant constraints. The three translations of one reference corner are fixed to remove rigid-body motion.
+These offsets were \(1.04\times10^{-8}\) m and \(4.16\times10^{-8}\) m. I applied constraints to face-interior, edge, and corner nodes, with a reference corner fixed to remove rigid-body motion. The approach follows [Barbero (2014), Chapter 6](../README.md#references) and the RVE work in [Pawlik et al. (2019)](https://doi.org/10.1016/j.compositesb.2019.107097).
 
-The original executable commands, with comment lines removed, are retained in [xy-shear-periodic-original.inp](../apdl-scripts/xy-shear-periodic-original.inp). The script should be executed on a **matching periodic mesh**; their node searches and boundary-coordinate tolerance depend on that mesh. The underlying periodic-shear formulation follows Barbero, Chapter 6, Eqs. (6.29)–(6.39).
+My original executable commands, with only comments removed, are in [xy-shear-periodic-original.inp](../apdl-scripts/xy-shear-periodic-original.inp).
 
-## 3. Energy-Based Post-Processing
+## Energy-based result
 
-The ANSYS /POST1 commands sum the **elastic strain energy** and **volume** over all selected solid elements. The volume-averaged **engineering XY elastic shear strain** is calculated from the element table:
-
-\[
-V=\sum_e V_e,\qquad U=\sum_e U_e,\qquad
-\overline\gamma_{12}=\frac{\sum_e\gamma_{12,e}V_e}{V}.
-\]
-
-For the imposed pure-shear macroscopic strain state, the effective shear modulus is
+I used my [post-processing APDL script](../apdl-scripts/xy-shear-energy-post1.inp) to sum the element elastic strain energies and volumes. I calculated the volume-averaged engineering XY shear strain and evaluated
 
 \[
-\boxed{G_{12}=\frac{2U}{V\overline\gamma_{12}^{\,2}}}.
+G_{12}=\frac{2U}{V\overline{\gamma}_{12}^{\,2}},
 \]
 
-The post-processing commands are supplied in [xy-shear-energy-post1.inp](../apdl-scripts/xy-shear-energy-post1.inp). Volumes are in m³, strain energy in joules, and \(G_{12}\) in pascals (converted to GPa in the script).
+where \(U\) is total elastic strain energy, \(V\) is the RVE volume, and \(\overline{\gamma}_{12}\) is the volume-averaged engineering shear strain.
 
-## 4. Recorded ANSYS Result
-
-The original ANSYS run on **9 November 2026** produced:
-
-| Parameter | Value |
+| Recorded quantity | Value |
 |---|---:|
-| Applied engineering shear, GAM | 0.01000000 |
-| Average engineering shear, GAMAVG | 0.01000011324 |
-| Total volume, VTOT | 2.49200639 × 10⁻¹⁶ m³ |
-| Total strain energy, UTOT | 8.45025999 × 10⁻¹¹ J |
-| G12ENGGPA | **6.781739110 GPa** |
+| Total RVE volume, \(V\) | \(2.49200639\times10^{-16}\) m³ |
+| Elastic strain energy, \(U\) | \(8.45025999\times10^{-11}\) J |
+| Average shear strain, \(\overline{\gamma}_{12}\) | 0.01000011324 |
+| **Calculated \(G_{12}\)** | **6.781739 GPa** |
+| Pawlik et al. (2019) | 6.780000 GPa |
+| Relative difference | **0.026%** |
 
-Independent substitution of the logged values yields
+The recorded run on 9 November 2026 converged after **219 PCG iterations** with no errors. The [solver summary](../results/random-20pct-shear-solver-summary.md) preserves the numerical inputs and warnings.
 
-\[
-G_{12}=\frac{2(8.45025999\times10^{-11})}
-{(2.49200639\times10^{-16})(0.01000011324)^2}
-\approx6.78173912\ \mathrm{GPa}.
-\]
-
-The calculated modulus differs from **6.78 GPa** reported by Pawlik et al. (2019) by approximately **0.026%**. The solver converged after **219 PCG iterations** with zero errors. The script printed **BADPAIR = 0** for its unmatched **face-interior** pairs.
-
-The detailed values are recorded in [random-20pct-shear-solver-summary.md](../results/random-20pct-shear-solver-summary.md), with the literature comparison in [random-20pct-validation.csv](../results/random-20pct-validation.csv).
-
-## 5. Reproducibility Notes
-
-The original APDL commands and the strain-energy outputs reproduce the reported result. However, the following checks are not yet documented: the periodic displacement-jump residuals (including edges and vertices), independent confirmation of the material assignments in the solved model, and mesh convergence. The solver also warned that element shape checking was inactive and advised checking reduced-integration brick elements with PCG. These limitations should be addressed before describing the model as fully numerically verified.
-
-## References
-
-1. Pawlik, M., Le, H., and Lu, Y. (2019). *Effects of the graphene nanoplatelets reinforced interphase on mechanical properties of carbon fibre reinforced polymer – A multiscale modelling study*. **Composites Part B: Engineering, 177**, 107097.
-2. Barbero, E. J. (2014). *Finite Element Analysis of Composite Materials Using ANSYS*, 2nd ed., Chapter 6, Eqs. (6.29)–(6.40).
+**Verification status:** The strain-energy calculation is reproducible from the logged output. Mesh convergence, all periodic displacement-jump residuals, and independent material-assignment verification have not been documented. The script's zero unmatched-node counter covers **face interiors only**, not the edge and corner checks. This is agreement with a numerical benchmark, not independent experimental validation.
