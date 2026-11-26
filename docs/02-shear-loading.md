@@ -23,7 +23,7 @@ These offsets were $1.04\times10^{-8}$ m and $4.16\times10^{-8}$ m. I applied co
 
 ## Energy-based result
 
-I used my [post-processing APDL script](../apdl-scripts/xy-shear-energy-post1.inp) to sum the element elastic strain energies and volumes. I calculated the volume-averaged engineering XY shear strain and evaluated
+I used my [post-processing APDL script](../apdl-scripts/post-processing-APDL-script.inp) to sum the element elastic strain energies and volumes. I calculated the volume-averaged engineering XY shear strain and evaluated
 
 $$
 G_{12}=\frac{2U}{V\overline{\gamma}_{12}^{\,2}},
