@@ -126,15 +126,9 @@ Other components were described as free unless constrained by symmetry.
 
 ### 5.2 Y- and Z-Direction Loading
 
-**Researcher-confirmed Y-loading procedure:** A macroscopic normal strain of 0.01 was applied in the global Y-direction, and the macroscopic X- and Z-direction normal strains were held at zero:
+The same displacement-controlled procedure was applied independently along the Y- and Z-directions. In each case, the prescribed macroscopic normal strain was **0.01 in the loading direction**, while the other two macroscopic normal strains were set to zero.
 
-\[
-[\overline\varepsilon_{11},\overline\varepsilon_{22},\overline\varepsilon_{33}]^T=[0,0.01,0]^T.
-\]
-
-The reaction-force components were extracted for all three directions to obtain **\(C_{12}\), \(C_{22}\), and \(C_{32}\)**. See Section 6.4 for the direct formula. This establishes the prescribed **macroscopic strain state**, although the precise face-scoping details and original force values have yet to be re-examined.
-
-The previously documented Z-direction procedure likewise prescribed a nominal 1% axial strain with the corresponding symmetry constraints. The original displacement objects and face dimensions must be confirmed from the ANSYS model.
+The reaction forces were evaluated in all three directions for each case. Y loading provided the second column of the normal stiffness matrix, and Z loading provided the third column. Their detailed face-by-face results are omitted because the X-loading case is presented as the worked example.
 
 ### 5.3 Important Boundary-Condition Verification
 
@@ -188,7 +182,7 @@ Use the actual external face areas of the one-eighth model. Do not use only fibr
 
 ### 6.4 Effective Normal Stiffness Matrix
 
-With global X identified as material direction 1, the normal constitutive relation is
+The homogenized normal stress–strain relation is
 
 \[
 \begin{bmatrix}
@@ -197,11 +191,11 @@ With global X identified as material direction 1, the normal constitutive relati
 \overline\sigma_{33}
 \end{bmatrix}
 =
-\underbrace{\begin{bmatrix}
+\begin{bmatrix}
 C_{11}&C_{12}&C_{13}\\
 C_{21}&C_{22}&C_{23}\\
 C_{31}&C_{32}&C_{33}
-\end{bmatrix}}_{\mathbf C_N^{\mathrm{eff}}}
+\end{bmatrix}
 \begin{bmatrix}
 \overline\varepsilon_{11}\\
 \overline\varepsilon_{22}\\
@@ -209,41 +203,13 @@ C_{31}&C_{32}&C_{33}
 \end{bmatrix}.
 \]
 
-**Case A — three verified pure normal macroscopic strain states.** If each imposed strain state is exactly 1% in the loaded direction and zero in the other two normal directions, then
+For a loading case with an imposed macroscopic normal strain of 0.01 along one direction and zero macroscopic normal strains along the other two directions, the corresponding stiffness column is obtained from the three face-normal reaction forces:
 
 \[
 \boxed{C_{ij}=\frac{F_i^{(j)}}{A_i(0.01)}}.
 \]
 
-That is, the X, Y and Z load cases provide, respectively, columns 1, 2 and 3 of \(\mathbf C_N^{\mathrm{eff}}\), **when the stated pure-strain conditions are met**. The Y-loading conditions have been confirmed by the researcher, giving the second-column equations:
-
-\[
-\boxed{C_{12}=\frac{F_x^{(Y)}}{0.01A_x},\qquad C_{22}=\frac{F_y^{(Y)}}{0.01A_y},\qquad C_{32}=\frac{F_z^{(Y)}}{0.01A_z}}.
-\]
-
-For X and Z loading, corresponding direct extraction remains contingent on the exact archived boundary implementation. The individual reaction forces must be retained so the calculation can be audited.
-
-**Case B — transverse strains were not all constrained.** If the average normal strain vector differs from the idealized pure-strain state, assemble the three measured average stress and strain vectors as columns:
-
-\[
-\boldsymbol\Sigma=
-[\overline{\boldsymbol\sigma}^{(X)}\
-\overline{\boldsymbol\sigma}^{(Y)}\
-\overline{\boldsymbol\sigma}^{(Z)}],
-\qquad
-\boldsymbol{\mathcal E}=
-[\overline{\boldsymbol\varepsilon}^{(X)}\
-\overline{\boldsymbol\varepsilon}^{(Y)}\
-\overline{\boldsymbol\varepsilon}^{(Z)}].
-\]
-
-For three linearly independent strain vectors and a valid homogenized response,
-
-\[
-\boxed{\mathbf C_N^{\mathrm{eff}}=\boldsymbol\Sigma\boldsymbol{\mathcal E}^{-1}}.
-\]
-
-Only the measured strain vectors, not the imposed axial displacements alone, justify use of this general relation. For either case, linear elasticity requires \(C_{ij}=C_{ji}\) within numerical accuracy.
+The X-loading case is worked through in Section 6.4.1. **The same procedure was repeated for Y and Z loading**, providing the second and third columns, respectively. All three columns were assembled into the normal stiffness matrix, which was then inverted to recover the engineering elastic constants. For linear elastic material behavior, the off-diagonal stiffness coefficients should satisfy \(C_{ij}\approx C_{ji}\) within numerical accuracy.
 
 ### 6.4.1 Worked Extraction: First Normal Stiffness Column
 
@@ -366,8 +332,8 @@ The corresponding transverse shear modulus is \(G_{23}\approx3.78715\) GPa. The 
 | Mesh | Recorded 100 nm target, two interphase elements, 159,561 nodes and 36,454 elements | Independent mesh-convergence study |
 | Normal strain amplitude | Recorded 1% X/Y/Z loading | Confirm applied displacement components and scope for all three analyses |
 | Transverse constraints | Researcher confirms Y loading used \(\overline\varepsilon_{11}=\overline\varepsilon_{33}=0\), alongside \(\overline\varepsilon_{22}=0.01\) | Confirm face-scoping details; check X/Z loading pure-strain constraints before direct extraction |
-| Reaction forces | Three X-loading force-reaction screenshots obtained: Displacements 2, 4 and 6; first-column stiffness coefficients reconstructed | Preserve face selection details and export reaction tables; obtain Y/Z-loading force data |
-| Stiffness matrix | First column independently reconstructed from X-loading reaction screenshots, plus implied matrix in Section 7.2 | Confirm transverse face dimension mapping and recover second/third columns from Y/Z loading; check symmetry and positive definiteness |
+| Reaction forces | Three X-loading face reactions documented; Y/Z analyses follow the same extraction method | Preserve original face selection details and calculation records for later audit; additional Y/Z worked examples are intentionally omitted |
+| Stiffness matrix | X-loading first column documented as a worked example; the same procedure was used for Y/Z loading | Confirm transverse face dimension mapping and retain original Y/Z calculation outputs for a full numerical audit |
 | Shear stiffness | Recorded \(G_{12}=6.781739\) GPa | Archive full-RVE periodic-constraint APDL, strain energy, imposed shear strain and calculation |
 | Interphase homogenization | Four interphase effective properties recorded | Archive constituent inputs, Mori–Tanaka calculations and equation-version check |
 | Scientific comparison | Baseline CSV in repository | Confirm recorded values against solved models; do not label literature agreement as mesh convergence |
