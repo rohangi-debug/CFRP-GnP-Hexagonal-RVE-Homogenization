@@ -8,7 +8,7 @@ I used a **full hexagonal RVE** in ANSYS Mechanical to calculate the effective l
 |---|---|
 | RVE dimensions (X × Y × Z) | 2.08 × 8.32 × 14.40 µm |
 | Fibre direction | Global X (material direction 1) |
-| Mesh count | 1,048,906 nodes; 249,879 SOLID186 elements |
+| Mesh count | 1,048,906 nodes; 249,879 elements |
 | Solver | ANSYS Mechanical / MAPDL 2026 R1 |
 | Applied engineering shear | $\gamma_{12}=0.01$ |
 
@@ -20,8 +20,6 @@ $$
 $$
 
 These offsets were $1.04\times10^{-8}$ m and $4.16\times10^{-8}$ m. I applied constraints to face-interior, edge, and corner nodes, with a reference corner fixed to remove rigid-body motion. The approach follows [Barbero (2014), Chapter 6](../README.md#references) and the RVE work in [Pawlik et al. (2019)](https://doi.org/10.1016/j.compositesb.2019.107097).
-
-My original executable commands, with only comments removed, are in [xy-shear-periodic-original.inp](../apdl-scripts/xy-shear-periodic-original.inp).
 
 ## Energy-based result
 
