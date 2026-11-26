@@ -18,6 +18,13 @@ The model represents three material regions: **carbon fibre**, **GnP-reinforced 
 
 The intended audience is researchers learning how to implement composite micromechanics in ANSYS, as well as engineers reviewing the modelling and verification workflow. This is an independent reproduction, not an official implementation from the original authors.
 
+## Implementation guides
+
+- [Normal loading: one-eighth RVE](docs/01-normal-loading.md) — displacement-controlled loading, reaction-force recovery and effective normal stiffness.
+- [Periodic XY shear: full RVE](docs/02-shear-loading.md) — APDL periodic constraints, energy-based shear modulus and verification checks.
+
+The original periodic-constraint input is retained alongside a sign-consistent review version in [apdl-scripts/](apdl-scripts/). The reviewed input has not yet been solved in ANSYS; use the recorded baseline result and original command file for reproducibility until the updated code is checked.
+
 ## Modelling workflow
 
 ```mermaid

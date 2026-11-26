@@ -1,0 +1,39 @@
+! Full-RVE XY shear modulus from elastic strain energy
+! Command object: immediately after ANSYS /POST1.
+
+/POST1
+SET,LAST
+ALLSEL,ALL
+ESEL,ALL
+RSYS,0
+
+ETABLE,ERAS
+ETABLE,VOL,VOLU
+ETABLE,SENE,SENE
+ETABLE,GXY,EPEL,XY
+SMULT,GXYVOL,GXY,VOL
+SSUM
+
+*GET,VTOT,SSUM,0,ITEM,VOL
+*GET,UTOT,SSUM,0,ITEM,SENE
+*GET,GXYVSUM,SSUM,0,ITEM,GXYVOL
+
+GAMAVG=GXYVSUM/VTOT
+G12ENG=2*UTOT/(VTOT*GAMAVG*GAMAVG)
+G12ENGGPA=G12ENG/1E9
+
+/COM,===============================================
+/COM, XY SHEAR ENERGY RECOVERY
+/COM,===============================================
+
+*VWRITE,VTOT
+('TOTAL VOLUME       = ',E16.8,' m^3')
+*VWRITE,UTOT
+('TOTAL STRAIN ENERGY= ',E16.8,' J')
+*VWRITE,GAMAVG
+('AVERAGE GAMMA_XY   = ',E16.8)
+*VWRITE,G12ENGGPA
+('G12 FROM ENERGY    = ',F12.6,' GPa')
+
+/COM,===============================================
+FINISH
