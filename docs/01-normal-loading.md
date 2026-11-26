@@ -31,6 +31,8 @@ The interphase properties were obtained by analytical homogenization following J
 
 A **Sweep Method** mesh was generated in ANSYS Mechanical, with a nominal element size of **100 nm** to provide approximately two elements through the 200 nm interphase. The recorded mesh contains **159,561 nodes** and **36,454 elements**. Element order was program controlled. A mesh-convergence study has not yet been documented.
 
+The carbon fibre, GnP-reinforced interphase, and epoxy were connected using **Shared Topology** in ANSYS Mechanical's **Connections** branch. This was used to maintain displacement continuity between the material regions.
+
 ## 4. Boundary Conditions
 
 Three separate static structural analyses were performed, applying **1% macroscopic normal strain** successively along X, Y and Z. In each case, the other two macroscopic normal strains were set to zero. The normal displacement on each boundary was prescribed; tangential components were left free except where required by the model's symmetry constraints.
