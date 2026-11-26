@@ -1,6 +1,6 @@
 # Periodic XY shear — full hexagonal RVE
 
-I used a **full hexagonal RVE** in ANSYS Mechanical to calculate the effective longitudinal shear modulus \(G_{12}\). This simulation used the same constituent materials and [homogenized random 20 vol% GnP interphase](00-interphase-properties.md) as my [normal-loading analysis](01-normal-loading.md).
+I used a **full hexagonal RVE** in ANSYS Mechanical to calculate the effective longitudinal shear modulus $G_{12}$. This simulation used the same constituent materials and [homogenized random 20 vol% GnP interphase](00-interphase-properties.md) as my [normal-loading analysis](01-normal-loading.md).
 
 ## Model and boundary conditions
 
@@ -10,16 +10,16 @@ I used a **full hexagonal RVE** in ANSYS Mechanical to calculate the effective l
 | Fibre direction | Global X (material direction 1) |
 | Mesh count | 1,048,906 nodes; 249,879 SOLID186 elements |
 | Solver | ANSYS Mechanical / MAPDL 2026 R1 |
-| Applied engineering shear | \(\gamma_{12}=0.01\) |
+| Applied engineering shear | $\gamma_{12}=0.01$ |
 
 I used APDL **constraint equations (CE)** to impose periodic displacement compatibility on opposite faces. My script implemented the XY shear displacement jumps
 
-\[
+$$
 \Delta u_y^{(X)}=\frac{\gamma_{12}L_x}{2},\qquad
 \Delta u_x^{(Y)}=\frac{\gamma_{12}L_y}{2}.
-\]
+$$
 
-These offsets were \(1.04\times10^{-8}\) m and \(4.16\times10^{-8}\) m. I applied constraints to face-interior, edge, and corner nodes, with a reference corner fixed to remove rigid-body motion. The approach follows [Barbero (2014), Chapter 6](../README.md#references) and the RVE work in [Pawlik et al. (2019)](https://doi.org/10.1016/j.compositesb.2019.107097).
+These offsets were $1.04\times10^{-8}$ m and $4.16\times10^{-8}$ m. I applied constraints to face-interior, edge, and corner nodes, with a reference corner fixed to remove rigid-body motion. The approach follows [Barbero (2014), Chapter 6](../README.md#references) and the RVE work in [Pawlik et al. (2019)](https://doi.org/10.1016/j.compositesb.2019.107097).
 
 My original executable commands, with only comments removed, are in [xy-shear-periodic-original.inp](../apdl-scripts/xy-shear-periodic-original.inp).
 
@@ -27,18 +27,18 @@ My original executable commands, with only comments removed, are in [xy-shear-pe
 
 I used my [post-processing APDL script](../apdl-scripts/xy-shear-energy-post1.inp) to sum the element elastic strain energies and volumes. I calculated the volume-averaged engineering XY shear strain and evaluated
 
-\[
+$$
 G_{12}=\frac{2U}{V\overline{\gamma}_{12}^{\,2}},
-\]
+$$
 
-where \(U\) is total elastic strain energy, \(V\) is the RVE volume, and \(\overline{\gamma}_{12}\) is the volume-averaged engineering shear strain.
+where $U$ is total elastic strain energy, $V$ is the RVE volume, and $\overline{\gamma}_{12}$ is the volume-averaged engineering shear strain.
 
 | Recorded quantity | Value |
 |---|---:|
-| Total RVE volume, \(V\) | \(2.49200639\times10^{-16}\) m³ |
-| Elastic strain energy, \(U\) | \(8.45025999\times10^{-11}\) J |
-| Average shear strain, \(\overline{\gamma}_{12}\) | 0.01000011324 |
-| **Calculated \(G_{12}\)** | **6.781739 GPa** |
+| Total RVE volume, $V$ | $2.49200639\times10^{-16}$ m³ |
+| Elastic strain energy, $U$ | $8.45025999\times10^{-11}$ J |
+| Average shear strain, $\overline{\gamma}_{12}$ | 0.01000011324 |
+| **Calculated $G_{12}$** | **6.781739 GPa** |
 | Pawlik et al. (2019) | 6.780000 GPa |
 | Relative difference | **0.026%** |
 

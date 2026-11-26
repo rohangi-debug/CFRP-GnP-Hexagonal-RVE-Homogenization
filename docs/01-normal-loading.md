@@ -22,24 +22,24 @@ I performed three displacement-controlled static structural analyses. In each, I
 
 | Case | Prescribed axial strain | Displacement magnitude |
 |---|---|---|
-| X | \(\varepsilon_{11}=0.01\) | \(u_x=0.01L_x=1.04\times10^{-8}\) m |
-| Y | \(\varepsilon_{22}=0.01\) | \(u_y=0.01L_y=4.16\times10^{-8}\) m |
-| Z | \(\varepsilon_{33}=0.01\) | \(u_z=0.01L_z=7.20\times10^{-8}\) m |
+| X | $\varepsilon_{11}=0.01$ | $u_x=0.01L_x=1.04\times10^{-8}$ m |
+| Y | $\varepsilon_{22}=0.01$ | $u_y=0.01L_y=4.16\times10^{-8}$ m |
+| Z | $\varepsilon_{33}=0.01$ | $u_z=0.01L_z=7.20\times10^{-8}$ m |
 
-**X-loading example.** I prescribed \(u_x\) using **Displacement 2** on named selection **X1**, with its transverse displacement components free. I extracted normal reaction forces on three relevant boundaries and calculated each normal stiffness coefficient from
+**X-loading example.** I prescribed $u_x$ using **Displacement 2** on named selection **X1**, with its transverse displacement components free. I extracted normal reaction forces on three relevant boundaries and calculated each normal stiffness coefficient from
 
-\[
+$$
 \overline{\sigma}_{ii}=\frac{F_i}{A_i},
 \qquad C_{i1}=\frac{\overline{\sigma}_{ii}}{0.01}.
-\]
+$$
 
 | Reaction from ANSYS | Face area | Calculated coefficient |
 |---|---|---|
-| \(F_x=0.047475\) N | \(A_x=2.9952\times10^{-11}\) m² | \(C_{11}=158.503606\) GPa |
-| \(F_y=3.7473\times10^{-4}\) N | \(A_y=7.4880\times10^{-12}\) m² | \(C_{21}=5.004407\) GPa |
-| \(F_z=2.1655\times10^{-4}\) N | \(A_z=4.3264\times10^{-12}\) m² | \(C_{31}=5.005316\) GPa |
+| $F_x=0.047475$ N | $A_x=2.9952\times10^{-11}$ m² | $C_{11}=158.503606$ GPa |
+| $F_y=3.7473\times10^{-4}$ N | $A_y=7.4880\times10^{-12}$ m² | $C_{21}=5.004407$ GPa |
+| $F_z=2.1655\times10^{-4}$ N | $A_z=4.3264\times10^{-12}$ m² | $C_{31}=5.005316$ GPa |
 
-I repeated the reaction-force procedure for Y and Z loading to complete the normal stiffness matrix \(\mathbf C_N\). After calculating \(\mathbf S_N=\mathbf C_N^{-1}\), I obtained \(E_1=1/S_{11}\), \(E_2=1/S_{22}\), \(\nu_{12}=-S_{21}/S_{11}\), and \(\nu_{23}=-S_{32}/S_{22}\).
+I repeated the reaction-force procedure for Y and Z loading to complete the normal stiffness matrix $\mathbf C_N$. After calculating $\mathbf S_N=\mathbf C_N^{-1}$, I obtained $E_1=1/S_{11}$, $E_2=1/S_{22}$, $\nu_{12}=-S_{21}/S_{11}$, and $\nu_{23}=-S_{32}/S_{22}$.
 
 I recorded the [X-direction reaction data](../results/normal-x-reaction-summary.csv) and [comparison with the published values](../results/random-20pct-validation.csv).
 
