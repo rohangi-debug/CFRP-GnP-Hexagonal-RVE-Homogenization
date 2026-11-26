@@ -6,9 +6,9 @@
 
 | One-eighth RVE — symmetry-based normal loading | Full RVE — periodic shear loading |
 | :---: | :---: |
-| ![ANSYS Mechanical mesh of the one-eighth hexagonal RVE](images/one-eighth-rve-ansys.png) | ![ANSYS Mechanical mesh of the full hexagonal RVE](images/full-rve-ansys.png) |
+| ![ANSYS Mechanical geometry of the one-eighth hexagonal RVE](images/one-eighth-rve-ansys.png) | ![ANSYS Mechanical mesh of the full hexagonal RVE](images/full-rve-ansys.png) |
 
-*Original ANSYS Mechanical screenshots of the one-eighth and full RVE models.*
+*ANSYS Mechanical geometry view of the one-eighth RVE and mesh view of the full RVE.*
 
 ## Project overview
 
