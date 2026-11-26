@@ -40,4 +40,4 @@ where $U$ is total elastic strain energy, $V$ is the RVE volume, and $\overline{
 | Pawlik et al. (2019) | 6.780000 GPa |
 | Relative difference | **0.026%** |
 
-The recorded run on 9 November 2026 converged after **219 PCG iterations** with no errors. The [solver summary](../results/random-20pct-shear-solver-summary.md) preserves the numerical inputs and warnings.
+The recorded run on 9 November 2026 converged after **219 PCG iterations** with no errors. The [results table](../results/README.md) compares the calculated shear modulus with the reference paper.

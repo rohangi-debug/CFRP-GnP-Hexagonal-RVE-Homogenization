@@ -1,4 +1,0 @@
-Case,Probe,Boundary condition,Force component,Force (N),Gross face area (m2),Applied normal strain,Calculated stiffness coefficient,C value (GPa),Evidence
-X,Force Reaction,Displacement 2 (X1),Fx,0.047475,2.9952e-11,0.01,C11,158.503605769,ANSYS screenshot 2026-11-25
-X,Force Reaction 2,Displacement 4,Fy,3.7473e-4,7.488e-12,0.01,C21,5.004407051,ANSYS screenshot 2026-11-25
-X,Force Reaction 3,Displacement 6,Fz,2.1655e-4,4.3264e-12,0.01,C31,5.005316198,ANSYS screenshot 2026-11-25
