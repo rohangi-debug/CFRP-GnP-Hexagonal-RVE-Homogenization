@@ -51,7 +51,7 @@ flowchart TD
 
 *The 20% GnP designation refers to the interphase formulation, not a 20% GnP fraction throughout the entire CFRP. Detailed constituent inputs and calculation notes will be included with the reproducibility documentation.*
 
-**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. Their original `.SLDPRT` files belong in [`geometry/`](geometry/README.md); filenames and checksums are documented there. The binary CAD files and optional STEP exports are pending upload.
+**RVE geometry.** The one-eighth and full hexagonal RVEs were modelled separately in SolidWorks. Both `.SLDPRT` source files are available in [`geometry/`](geometry/), alongside their file manifest. Neutral STEP exports are not currently included.
 
 **Normal loading.** The **one-eighth RVE** is used for displacement-controlled normal loading along X, Y, and Z, subject to the appropriate symmetry constraints. The X-direction case will serve as the detailed worked example; the Y and Z cases follow a corresponding procedure.
 
@@ -69,7 +69,7 @@ flowchart TD
 | $\nu_{23}$ | 0.472923 | 0.47000 | 0.62% |
 | $G_{12}$ (GPa) | 6.781739 | 6.78000 | 0.03% |
 
-The relative difference is calculated as $100|p_{\mathrm{FE}}-p_{\mathrm{ref}}|/|p_{\mathrm{ref}}|$. Values above are from the recorded project calculations and will be checked against the archived models before the final reproducibility release. The tabular data are also provided in [`results/random-20pct-validation.csv`](results/random-20pct-validation.csv).
+The relative difference is calculated as $100|p_{\mathrm{FE}}-p_{\mathrm{ref}}|/|p_{\mathrm{ref}}|$. Values above are from the recorded project calculations and checked where original solver outputs are available. ANSYS Workbench project archives are not part of the repository. The tabular data are also provided in [`results/random-20pct-validation.csv`](results/random-20pct-validation.csv).
 
 An **aligned 20% GnP** interphase case was also analysed, but its agreement with published trends remains under review; it is **not** part of the validated comparison above.
 
@@ -78,16 +78,15 @@ An **aligned 20% GnP** interphase case was also analysed, but its agreement with
 | Folder | Purpose |
 |---|---|
 | `geometry/` | SolidWorks source geometry and STEP exports |
-| `ansys-models/` | Configured ANSYS Workbench project archives (`.wbpz`) |
 | `apdl-scripts/` | Periodic boundary-condition scripts and comments |
 | `docs/` | Modelling, boundary-condition, and post-processing guides |
 | `results/` | Numerical outputs and publication comparisons |
 | `references/` | Citation information and supporting reference metadata |
 | `images/` | Original model screenshots used in this README |
 
-**Current release status:** The repository contains the normal- and shear-loading guides, APDL source and reviewed-copy scripts, and recorded result summaries. The original `.SLDPRT` geometry files and Workbench project archives are **pending upload**. Project files should be reviewed for university ownership and software-licensing restrictions before publication.
+**Current release status:** The repository contains the normal- and shear-loading guides, APDL source and reviewed-copy scripts, and recorded result summaries. The SolidWorks parts are available in `geometry/`. ANSYS Workbench project archives (`.wbpz`) are **not included** in this repository; simulation methods and supporting APDL scripts are provided instead. Project files should be reviewed for university ownership and software-licensing restrictions before publication.
 
-**Software:** SolidWorks; ANSYS Workbench / Mechanical (2026 R1, pending confirmation against the archived projects).
+**Software:** SolidWorks; ANSYS Workbench / Mechanical. The archived shear solver output identifies ANSYS MAPDL 2026 R1.
 
 ## References
 
